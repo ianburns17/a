@@ -1,33 +1,19 @@
 import express from "express";
 import path from "path";
 const router = express.Router();
+import { getHome } from "../controllers/subscriberController.js";
+import { sign } from "../controllers/signup.js";
+import { thankyou } from "../controllers/thanksyou.js";
+import { postSignup} from "../controllers/con.js";
 
-let signups = [];
 
-router.get("/", (req, res) => {
-  res.send("Home page\n");
-});
 
-router.get("/signup", (req, res) => {
-  res.render("signup", {
-    title: "Sign Up",
-    message: "Drop your contact below",
-    confirm: "Let's Go",
-  });
-});
+router.get("/", getHome);
 
-router.post("/signup", (req, res) => {
-  const { name, email } = req.body;
-  if (!name || !email) {
-    return res.status(400).send("Name and email are required.");
-  }
+router.get("/signup", sign);
 
-  signups.push({ name, email });
-  res.render("thankyou", { title: "Thank You", name, email });
-});
+router.post("/signup", postSignup);
 
-router.get("/signups", (req, res) => {
-  res.json(signups);
-});
+router.get("/signups", thankyou );
 
 export default router;
